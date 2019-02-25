@@ -14,7 +14,6 @@
 
 #include "matrix.h"
 
-
 /*-------------- void print_matrix() --------------
 Inputs:  struct matrix *m
 
@@ -24,11 +23,12 @@ the template in the top comment
 void print_matrix(struct matrix *m) {
   for(int i=0; i<(m->rows); i++){
     for(int k=0; k<(m->cols); k++){
-      int num = (m->m)[k][i];
+      int num = (m->m)[i][k];
       printf("%d ", num);
     }
     printf("\n");
   }
+  printf("\n");
 }
 
 /*-------------- void ident() --------------
@@ -56,23 +56,21 @@ multiply a by b, modifying b to be the product
 a*b -> b
 */
 void matrix_mult(struct matrix *a, struct matrix *b) {
-  int total, i, k;
+  int total;
   struct matrix * new_m = new_matrix(4, b->cols);
   
   
-  for(k=0; k<(b->cols); k++){
-    total = 0; 
-    for(i=0; i<4; i++){
-      for(int j = 0; j<4; j++)
-	total += b->m[i][k] * a->m[i][j];
-      printf("%d\n", total);
-      new_m->m[k][i] = total;
-      print_matrix(new_m);
-      printf("\n");
+  for(int a_row=0; a_row<4; a_row++){
+    for(int b_col=0; b_col<b->cols; b_col++){
+      total = 0;
+      for(int b_row=0; b_row<4; b_row++){
+	total += a->m[a_row][b_row] * b->m[b_row][b_col];
+      }
+      new_m->m[a_row][b_col] = total;
     }
   }
-  b = new_m;
- }
+  *b = *new_m;
+}
 
 
 
